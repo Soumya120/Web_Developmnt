@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="..\static\newValidation.js"></script>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+  <script>
+    function getSubCat(cat_id) {
+      var category = cat_id.value
+
+      $.ajax({
+			url: '/getSubCat?cat_id='+category,
+			type: 'GET',
+			success: function(response){
+				console.log("EEEEEEEEEEEEEE");
+				console.log(response);
+			},
+			error: function(error){
+				console.log("WWWWWWWWWWWWW");
+				console.log(error);
+			}
+		});
+    }
+  </script>
+</head>
+<div class="container-fluid" style="background-color: rgb(107, 245, 255);">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light ">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="http://127.0.0.1:5000/">NeoSOFT</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/create">Add Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/addcategory">Add Category</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/addsub_category">Add Subcategory</a>
+            </li>
+          </ul>
+        </div>
+        <a class="nav-link" href="/logout">Logout</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<body>
+  <div class="container">
+    <form method="POST" name="addcat_subcat" onsubmit="validates()" action="" enctype="multipart/form-data">
+      <table class="table">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <tr>
+          <td>Category</td>
+          <td><select name="category" class="form-control" onchange="getSubCat(this)">
+              {% for category in categorys %}
+              <option value="{{category.cat_id}}">{{category.cat_id}} : {{category.name}}</option>
+              {% endfor %}
+              <option disabled>----Sub Categories of above Categories----</option>
+              {% for subcategory in subcategories %}
+              <option value="{{subcategory.subcat_id}}">{{subcategory.cat_id}} : {{subcategory.subcat_name}}</option>
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Sub_Category Name</td>
+          <td><input type="text" name="subcat_name" class="form-control" /></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input type="submit" name="submit" value="submit" class="btn btn-warning">
+          </td>
+
+        </tr>
+      </table>
+    </form>
+
+  </div>
+</body>
+
+</html>
